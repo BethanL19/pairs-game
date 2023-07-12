@@ -17,6 +17,7 @@ html {
   gap: 10px;
   text-align: center;
   width: 45%;
+  height: auto;
   margin: auto;
 }
 
