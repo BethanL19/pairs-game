@@ -29,6 +29,7 @@ html {
   background-color: white;
   border: 1px solid black;
   color: transparent;
+  text-align: center;
 }
 
 .card.matched {
