@@ -17,7 +17,21 @@ export function Pairs(): JSX.Element {
     return new Promise((resolve) => setTimeout(resolve, mseconds));
   };
 
+  const alreadyMatchedOrActive = (card: CardsDataInfo) => {
+    if (card.status === "matched") {
+      alert("already matched!");
+      return true;
+    } else if (card.status === "active") {
+      alert("already selected!");
+      return true;
+    } else {
+      return false;
+    }
+  };
   const handleClick = (card: CardsDataInfo) => {
+    if (alreadyMatchedOrActive(card)) {
+      return;
+    }
     const updatedCards = cards.map((eachCard) => {
       if (eachCard.id === card.id) {
         return { ...eachCard, status: "active" };
