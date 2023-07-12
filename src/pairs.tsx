@@ -13,6 +13,10 @@ export function Pairs(): JSX.Element {
   const [firstCard, setFirstCard] = useState<CardsDataInfo>(cardReset);
   const [cards, setCards] = useState<CardsDataInfo[]>(shuffleCards);
 
+  const sleep = (mseconds: number) => {
+    return new Promise((resolve) => setTimeout(resolve, mseconds));
+  };
+
   const handleClick = (card: CardsDataInfo) => {
     const updatedCards = cards.map((eachCard) => {
       if (eachCard.id === card.id) {
@@ -31,7 +35,7 @@ export function Pairs(): JSX.Element {
     setFirstCard(card);
     setClickCounter(1);
   };
-  const SecondClick = (card: CardsDataInfo) => {
+  const SecondClick = async (card: CardsDataInfo) => {
     const updatedCards = cards.map((eachCard) => {
       if (eachCard.id === card.id) {
         return { ...eachCard, status: "active" };
@@ -41,9 +45,8 @@ export function Pairs(): JSX.Element {
     setCards(updatedCards);
     setClickCounter(0);
     setFirstCard(cardReset);
-    setTimeout(() => {
-      checkForMatch(card);
-    }, 500);
+    await sleep(500);
+    checkForMatch(card);
   };
   const checkForMatch = (card: CardsDataInfo) => {
     const updatedCards = cards.map((eachCard) => {
