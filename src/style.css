@@ -27,8 +27,14 @@ html {
   font-size: xxx-large;
   background-color: white;
   border: 1px solid black;
+  color: transparent;
 }
 
 .card.matched {
   background-color: rgb(174, 243, 174);
+  color: black;
+}
+
+.card.active {
+  color: white;
 }

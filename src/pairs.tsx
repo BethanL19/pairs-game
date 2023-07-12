@@ -1,18 +1,26 @@
 import { useState } from "react";
-import { CardsDataInfo, cardsData } from "./cards-data";
+import { CardsDataInfo, cardsData, shuffleArray } from "./cards-data";
 import { Card } from "./card";
 
 export function Pairs(): JSX.Element {
-  const shuffleCards = cardsData.sort(() => Math.random() - 0.5);
+  const shuffleCards = shuffleArray(cardsData);
   const [clickCounter, setClickCounter] = useState(0);
-  const [firstCard, setFirstCard] = useState<CardsDataInfo>({
+  const cardReset = {
     id: -1,
     cardEmoji: "",
     status: "",
-  });
+  };
+  const [firstCard, setFirstCard] = useState<CardsDataInfo>(cardReset);
   const [cards, setCards] = useState<CardsDataInfo[]>(shuffleCards);
 
   const handleClick = (card: CardsDataInfo) => {
+    const updatedCards = cards.map((eachCard) => {
+      if (eachCard.id === card.id) {
+        return { ...eachCard, status: "active" };
+      }
+      return eachCard;
+    });
+    setCards(updatedCards);
     if (clickCounter === 0) {
       FirstClick(card);
     } else if (clickCounter === 1) {
@@ -24,19 +32,33 @@ export function Pairs(): JSX.Element {
     setClickCounter(1);
   };
   const SecondClick = (card: CardsDataInfo) => {
-    checkForMatch(card);
+    const updatedCards = cards.map((eachCard) => {
+      if (eachCard.id === card.id) {
+        return { ...eachCard, status: "active" };
+      }
+      return eachCard;
+    });
+    setCards(updatedCards);
     setClickCounter(0);
+    setFirstCard(cardReset);
+    setTimeout(() => {
+      checkForMatch(card);
+    }, 500);
   };
   const checkForMatch = (card: CardsDataInfo) => {
-    if (card.id === firstCard.id) {
-      const updatedCards = cards.map((eachCard) => {
-        if (eachCard.id === card.id) {
-          return { ...eachCard, status: "matched" };
-        }
-        return card;
-      });
-      setCards(updatedCards);
-    }
+    const updatedCards = cards.map((eachCard) => {
+      if (
+        eachCard.cardEmoji === firstCard.cardEmoji &&
+        card.cardEmoji === firstCard.cardEmoji
+      ) {
+        return { ...eachCard, status: "matched" };
+      } else if (eachCard.status === "active") {
+        return { ...eachCard, status: "" };
+      } else {
+        return { ...eachCard };
+      }
+    });
+    setCards(updatedCards);
   };
   const cardsOutput = cards.map((eachCard, index) => (
     <Card key={index} card={eachCard} click={() => handleClick(eachCard)} />
